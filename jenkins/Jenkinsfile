@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // Define any environment variables here if necessary
-        MVN_HOME = tool 'Maven'
-        JAVA_HOME = tool 'JDK 11'
+        // Menggunakan nama tool yang telah dikonfigurasi di Jenkins
+        MVN_HOME = tool name: 'mvn', type: 'maven'
+        JAVA_HOME = tool name: 'JDK 11', type: 'jdk'
     }
 
     stages {
