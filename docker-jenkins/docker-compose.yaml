@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  jenkins:
+    build: .
+    container_name: jenkins-java11
+    ports:
+      - "8080:8080"   # Port untuk akses Jenkins UI
+      - "50000:50000" # Port untuk komunikasi dengan Jenkins agents
+    volumes:
+      - jenkins_home:/var/jenkins_home # Volume untuk persistensi data Jenkins
+
+volumes:
+  jenkins_home:

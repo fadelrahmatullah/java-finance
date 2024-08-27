@@ -10,6 +10,6 @@ import com.report.finance.backend.entity.UserInfoEntity;
 @Repository
 public interface UserInfoRepository extends JpaRepository<UserInfoEntity, Long>{
     
-    @Query("FROM UserInfoEntity WHERE userName = :userName")
+    @Query("FROM UserInfoEntity WHERE username = :userName")
 	UserInfoEntity getUserByUserName(@Param("userName") String userName);
 }

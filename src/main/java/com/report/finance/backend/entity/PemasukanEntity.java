@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +33,7 @@ public class PemasukanEntity {
     @Column(name = "deskripsi", length = 255)
     private String deskripsi;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
 

@@ -50,27 +50,26 @@ public class JwtUtil {
         List<String> listRole = new ArrayList<>(Arrays.asList("ADMIN"));
         authorizationInfo.setIsSuperAdmin(true);
         authorizationInfo.setRoleCds(listRole);
-
+        String secret = Base64.getEncoder().encodeToString(jwtSecret.getBytes());
         Date issuedAt = new Date();
         Date expiration = new Date(issuedAt.getTime() + (jwtExpired));
         String token = 
                 Jwts.builder().setId(UUID.randomUUID().toString()).setSubject(username)
                 .claim(CLAIM_KEY_AUTHORITIES, authorizationInfo)
                 .setIssuedAt(issuedAt).setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS512,
-                jwtSecret.getBytes()).compact();
+                .signWith(SignatureAlgorithm.HS512,secret.getBytes()).compact();
 
         return new JwtInfo(token, username, issuedAt, expiration, jwtExpired);
     }
 
     public JwtInfo generateRefreshToken(String username) {
         log.debug("JwtUtil.generateRefreshToken...");
-
+        String secret = Base64.getEncoder().encodeToString(jwtSecret.getBytes());
         Date issuedAt = new Date();
         Date expiration = new Date(issuedAt.getTime() + (jwtRefreshExpired));
         String token = Jwts.builder().setId(UUID.randomUUID().toString()).setSubject(username)
-                .setIssuedAt(issuedAt).setExpiration(expiration).signWith(SignatureAlgorithm.HS512,
-                        jwtRefreshSecret.getBytes()).compact();
+                .setIssuedAt(issuedAt).setExpiration(expiration)
+                .signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
 
         return new JwtInfo(token, username, issuedAt, expiration, jwtRefreshExpired);
     }

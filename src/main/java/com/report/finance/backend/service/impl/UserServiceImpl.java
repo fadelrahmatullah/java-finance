@@ -3,10 +3,12 @@ package com.report.finance.backend.service.impl;
 import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.report.finance.backend.dto.BusinessException;
@@ -20,7 +22,6 @@ import com.report.finance.backend.entity.UserInfoEntity;
 import com.report.finance.backend.repository.UserInfoRepository;
 import com.report.finance.backend.service.UserService;
 import com.report.finance.backend.util.JwtUtil;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -34,6 +35,9 @@ public class UserServiceImpl implements UserService{
 
     private final UserInfoRepository userInfoRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public LoginResponse login(User user) {
         return this.generLoginResponseLogin(user);
@@ -42,7 +46,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserInfo creatUserInfo(UserRequest userRequest, String username) {
         
-        UserInfoEntity entity = userInfoRepository.getUserByUserName(username);
+        UserInfoEntity entity = userInfoRepository.getUserByUserName(userRequest.getUserName());
 
         if (entity != null) {
             throw new ValidationException("ERROR0001", userRequest.getUserName()+" Already Exist");
@@ -50,6 +54,10 @@ public class UserServiceImpl implements UserService{
 
         entity = new UserInfoEntity();
         BeanUtils.copyProperties(userRequest, entity);
+		String finalPass = passwordEncoder.encode(userRequest.getPassword());
+
+        entity.setUsername(userRequest.getUserName());
+        entity.setPassword(finalPass);
         entity.setCreatedAt(new Date());
         entity.setUpdatedAt(new Date());
 
@@ -78,6 +86,18 @@ public class UserServiceImpl implements UserService{
 		response.setAccessTokenAge(accessTokenInfo.getAge());
 
         return response;
+    }
+
+    @Override
+    public UserInfoEntity getUserInfo(String username) {
+        UserInfoEntity entity = userInfoRepository.getUserByUserName(username);
+
+        if (entity == null) {
+            throw new ValidationException("ERROR0001", username.toUpperCase()+" Not Found");
+        }
+
+        return entity;
+
     }
     
 }

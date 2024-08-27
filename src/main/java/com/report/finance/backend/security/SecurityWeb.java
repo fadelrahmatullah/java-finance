@@ -59,7 +59,7 @@ public class SecurityWeb extends WebSecurityConfigurerAdapter{
 				.antMatchers(HttpMethod.GET, "/generate-error").permitAll()
 				.antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers("/swagger-report-finance/**").permitAll()
-                .antMatchers("/v3/api-docs/**", "/swagger*/**", "/swagger-scc/**").permitAll()
+                .antMatchers("/v3/api-docs/**", "/swagger*/**", "/swagger-report-finance/**").permitAll()
                 .anyRequest()
 				.authenticated();
         
@@ -86,7 +86,11 @@ public class SecurityWeb extends WebSecurityConfigurerAdapter{
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/*").allowedOrigins("*");
+				registry.addMapping("/**")  // Izinkan CORS untuk semua endpoint
+                .allowedOrigins("*")  // Izinkan semua domain
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // Metode HTTP yang diizinkan
+                .allowedHeaders("*")  // Header yang diizinkan
+                .allowCredentials(false); 
 			}
 		};
 	}

@@ -1,6 +1,11 @@
 package com.report.finance.backend.dto;
 
+import java.util.Date;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,8 +21,11 @@ public class PemasukkanInputReq {
 
     private String deskripsi;
 
+    @NotNull(message = "Jumlah Pemasukkan Cannot Be Null")
     private Double jumlah;
 
-    private java.sql.Date tglPemasukan;
+    @NotBlank(message = "tgl Pemasukkan Cannot Be Null")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private String tglPemasukan;
 
 }

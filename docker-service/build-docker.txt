@@ -1,0 +1,13 @@
+cd D:\Fadel\ReportFinanceWorkspace\backend\docker-service
+
+docker-compose build --> build images dockerfile
+docker-compose up --build -d --> up docker compose
+
+################
+untuk restart
+docker rmi backend-java-app:latest
+docker-compose down
+
+jalankan lgi
+docker-compose build --> build images dockerfile
+docker-compose up -d --> up docker compose
