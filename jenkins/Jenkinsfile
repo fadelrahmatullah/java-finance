@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        // Menggunakan nama tool yang telah dikonfigurasi di Jenkins
         MVN_HOME = tool name: 'maven', type: 'maven'
         JAVA_HOME = tool name: 'JDK-11', type: 'jdk'
     }
@@ -10,7 +9,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Clone the code from GitHub
                 checkout([$class: 'GitSCM',
                     branches: [[name: 'main']],
                     userRemoteConfigs: [[url: 'https://github.com/fadelrahmatullah/java-finance.git']]
@@ -20,31 +18,42 @@ pipeline {
 
         stage('Build') {
             steps {
-                // Build the application using Maven
+                echo 'Building the application'
                 sh "${MVN_HOME}/bin/mvn clean package"
             }
         }
 
         stage('Test') {
             steps {
-                // Run unit tests (optional)
+                echo 'Running unit tests'
                 sh "${MVN_HOME}/bin/mvn test"
+            }
+        }
+
+        stage('Run Application') {
+            steps {
+                echo 'Running the application'
+                // Pastikan Anda telah membangun aplikasi dan file JAR ada di direktori target
+                sh 'java -jar target/your-app.jar'
             }
         }
 
         stage('Deploy') {
             steps {
-                // Deploy the application (define your deployment steps here)
                 echo 'Deployment process goes here'
-                // Example: copy the JAR file to a deployment directory or server
-                // sh 'scp target/*.jar user@server:/path/to/deploy'
+                // Deployment commands for the application
             }
         }
     }
 
     post {
+        success {
+            echo 'Build and deployment were successful'
+        }
+        failure {
+            echo 'Build or deployment failed'
+        }
         always {
-            // Clean up workspace or any additional tasks
             cleanWs()
         }
     }
