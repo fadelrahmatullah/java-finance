@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         // Menggunakan nama tool yang telah dikonfigurasi di Jenkins
-        MVN_HOME = tool name: 'mvn', type: 'maven'
-        JAVA_HOME = tool name: 'JDK 11', type: 'jdk'
+        MVN_HOME = tool name: 'maven', type: 'maven'
+        JAVA_HOME = tool name: 'JDK-11', type: 'jdk'
     }
 
     stages {
