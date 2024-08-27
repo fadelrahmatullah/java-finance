@@ -11,7 +11,10 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clone the code from GitHub
-                git 'https://github.com/fadelrahmatullah/java-finance.git', branch: 'main'
+                checkout([$class: 'GitSCM',
+                    branches: [[name: 'main']],
+                    userRemoteConfigs: [[url: 'https://github.com/fadelrahmatullah/java-finance.git']]
+                ])
             }
         }
 
